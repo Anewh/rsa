@@ -1,0 +1,53 @@
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>RSA</title>
+
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<script type="text/javascript" src="script.js" defer></script>
+</head>
+
+<body>
+	<div class="panel">
+		<h3 class="panel__header"> закодировать RSA</h3>
+		<div name="initialData" id="rsa" class=" initial-data">
+			<label> Текст </label>
+			<input type="text" name="text" id="text" class="initial-data__text" required>
+			<br>
+			<div id="initialDataFiles">
+				<button id="dataSave" class="button">Сохранить</button>
+				<input type="file" id="dataLoad" class="button">
+			</div>
+			<div id="initialDataFiles">
+			</div>
+			<input type="submit" name="submit" id="encode" class="button" value="Кодировать">
+			<br>
+			<label id="resultEncode" style="overflow: auto;"></label>
+
+		</div>
+	</div>
+	<div class="panel">
+		<h3 class="panel__header"> раскодировать RSA </h3>
+		<div name="initialData" id="rsa" class=" initial-data">
+			<label> RSA (code)</label>
+			<input type="text" name="code" id="code" class="initial-data__text" required>
+
+			<label> d </label>
+			<input type="text" name="dimensionsCount" id="d" class="initial-data__text" required>
+			<label> n </label>
+			<input type="text" name="dimensionsCount" id="n-decode" class="initial-data__text" required>
+			<br>
+			<div id="initialDataFiles">
+				<button id="resultSave" class="button">Сохранить</button>
+			</div>
+			<br>
+			<input type="submit" name="submit" id="decode" class="button" value="Декодировать">
+			<label id="resultDecode" style="overflow: auto;"></label>
+			<label id="initialDataError">Ошибка</label>
+		</div>
+	</div>
+</body>
+
+</html>
