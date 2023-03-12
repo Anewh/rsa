@@ -1,57 +1,49 @@
+const simpleNums = [11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97];
+
 class RSA {
     p = 0;
     q = 0;
     n = 0;
     e = 3;
     d = -1;
-    eiler = 0;
-    simpleNums = [11, 13, 17, 19, 23, 29, 31, 37];
     msg = '';
 
-    encode(msg, e, n) {
-        if (!n || !e) {
-            this.generateKeys();
-        } else {
-            this.e = e;
-            this.n = n;
-        }
-        let b;
-        let tmp;
+    encode(msg) {
+        let char;
         let result = [];
+        this.generateKeys();
+        let codes = msg.split('').map(x => x = x.charCodeAt(0));
         for (let j = 0; j < msg.length; j++) {
-            b = msg.charCodeAt(j);
-            tmp = 1;
+            char = 1;
             for (let i = 0; i < this.e; i++) {
-                tmp = (tmp * b) % this.n;
+                char = (char * codes[j]) % this.n;
             }
-            result.push(tmp);
+            result.push(char);
         }
         return result.join(' ');
     }
 
     decode(code, d, n) {
+        let char;
+        let result = '';
         this.d = d;
         this.n = n;        
         code = code.split(" ");
-        let b;
-        let tmp;
-        let result = '';
         for (let k = 0; k < code.length; k++) {
-            b = code[k];
-            tmp = 1;
+            char = 1;
             for (let i = 0; i < this.d; i++) {
-                tmp = (tmp * b) % this.n;
+                char = (char * code[k]) % this.n;
             }
-            result += String.fromCharCode(tmp);
+            result += String.fromCharCode(char);
         }
         return result;
     }
 
     generateKeys() {
-        let size = this.simpleNums.length;
+        let size = simpleNums.length;
         while (this.q == this.p) {
-            this.q = this.simpleNums[Math.floor(Math.random() * size)];
-            this.p = this.simpleNums[Math.floor(Math.random() * size)];
+            this.q = simpleNums[Math.floor(Math.random() * size)];
+            this.p = simpleNums[Math.floor(Math.random() * size)];
         }
         this.n = this.q * this.p;
         this.eiler = (this.p - 1) * (this.q - 1);
@@ -71,17 +63,27 @@ class RSA {
 }
 
 var gcd = function (a, b) {
-    if (!b) {
-        return a;
-    }
+    if (!b) return a;
     return gcd(b, a % b);
 }
 
-// let text = "text for console example";
-// let rsa = new RSA();
-// code = rsa.encode(text);
-// console.log(rsa.decode(code));
-
+function download(data, filename, type) {
+    var file = new Blob([data], { type: type });
+    if (window.navigator.msSaveOrOpenBlob)
+        window.navigator.msSaveOrOpenBlob(file, filename);
+    else {
+        var a = document.createElement("a"),
+            url = URL.createObjectURL(file);
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(function () {
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+        }, 0);
+    }
+}
 
 document.getElementById('encode').addEventListener("click", function (e) {
     document.getElementById("resultEncode").innerHTML = "";
@@ -105,25 +107,6 @@ document.getElementById('decode').addEventListener("click", function (e) {
     
 });
 
-
-function download(data, filename, type) {
-    var file = new Blob([data], { type: type });
-    if (window.navigator.msSaveOrOpenBlob)
-        window.navigator.msSaveOrOpenBlob(file, filename);
-    else {
-        var a = document.createElement("a"),
-            url = URL.createObjectURL(file);
-        a.href = url;
-        a.download = filename;
-        document.body.appendChild(a);
-        a.click();
-        setTimeout(function () {
-            document.body.removeChild(a);
-            window.URL.revokeObjectURL(url);
-        }, 0);
-    }
-}
-
 document.getElementById('dataLoad').addEventListener("change", function(e){ 
     var reader = new FileReader();
 	reader.readAsText(e.target.files[0], "UTF-8");
@@ -140,3 +123,4 @@ document.getElementById('dataSave').addEventListener('click', function (event) {
 document.getElementById('resultSave').addEventListener('click', function (event) {
 	download(document.getElementById('resultDecode').value, 'result.txt', 'text/plain');
 });
+
